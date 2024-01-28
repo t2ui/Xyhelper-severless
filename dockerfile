@@ -1,14 +1,18 @@
-# 使用一个合适的基础镜像
+# 选择基础镜像
 FROM ubuntu:latest
 
+# 安装git
+RUN apt-get update && \
+    apt-get install -y git
+
+# 克隆仓库
+RUN git clone --depth=1 https://github.com/xyhelper/chatgpt-mirror-server-deploy.git chatgpt-mirror
+
 # 设置工作目录
-WORKDIR /app
+WORKDIR /chatgpt-mirror
 
-# 更新软件包并安装curl
-RUN apt-get update && apt-get install -y curl bash
+# 授予deploy.sh执行权限
+RUN chmod +x deploy.sh
 
-# 下载并执行脚本
-RUN curl -sSfL https://raw.githubusercontent.com/xyhelper/chatgpt-mirror-server-deploy/master/quick-install.sh | bash
-
-# 设置容器启动时执行的命令
-CMD ["bash"]
+# 启动命令（假设deploy.sh是一个启动脚本）
+CMD ["./deploy.sh"]
